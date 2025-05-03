@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="material-icons/css/materialdesignicons.min.css" onerror="this.href='material-icons/css/materialdesignicons.min.css'" class="style">
+  <link rel="stylesheet" href="styles.css">
+  <title>Glassmorphism Clock Effect</title>
+</head>
+<body>
+  <div id="main-screen">
+    <div class="container">
+      <div class="glass-text-container">
+        <!-- The div that will have the backdrop-filter and be masked -->
+        <div class="glass-effect"></div>
+      </div>
+
+      <!-- SVG definitions for the mask -->
+      <svg width="1200" height="300">
+        <defs>
+          <mask id="clock-mask" width="1200" height="300">
+            <rect width="1200" height="300" fill="black"></rect>
+            <text id="date-text" x="600" y="70" font-size="var(--date-font-size)" font-family="var(--clock-font)" font-weight="normal" text-anchor="middle" dominant-baseline="middle" fill="white">Friday, May 3</text>
+            <text id="time-text" x="600" y="200" font-size="var(--time-font-size)" font-family="var(--clock-font)" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="white">00:00</text>
+          </mask>
+        </defs>
+      </svg>
+    </div>
+    
+    <!-- Login Box -->
+    <div class="login-container">
+      <!-- Left side - OS Logo -->
+      <div class="login-logo">
+        <img src="white-arch.svg" alt="Arch Logo" width="180" height="180">
+      </div>
+      
+      <!-- Right side - Login form -->
+      <div class="login-form">
+        <div class="profile-pic-container">
+          <img src="pfp.jpeg" alt="Profile" class="profile-pic">
+          <div class="profile-pic-overlay">
+            <div class="change-user-text">change<br>user</div>
+          </div>
+        </div>
+        <div class="username">John Doe</div>
+        <input type="password" class="password-input" placeholder="Enter Password">
+      </div>
+    </div>
+  </div>
+
+  <button id="settings-enter" type="button">
+    <span class="mdi mdi-cog" style="color: white;"></span>
+  </button>
+  
+  <!-- Settings Menu -->
+  <div id="settings-menu" class="settings-menu hide">
+    <div class="settings-menu-header">Settings</div>
+    
+    <div class="settings-menu-item" id="session-item">
+      <span class="mdi mdi-desktop-classic"></span>
+      Desktop Session
+    </div>
+    <select class="session-selector" id="session-selector">
+      <option value="hyprland">Hyprland</option>
+      <option value="xfce">XFCE</option>
+      <option value="gnome">GNOME</option>
+      <option value="kde">KDE Plasma</option>
+      <option value="i3">i3</option>
+    </select>
+    
+    <div class="settings-menu-item" id="power-item">
+      <span class="mdi mdi-power"></span>
+      Power Off
+    </div>
+  </div>
+
+  <script src="scripts.js"></script>
+</body>
+</html>
