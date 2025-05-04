@@ -1,88 +1,88 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="material-icons/css/materialdesignicons.min.css" onerror="this.href='material-icons/css/materialdesignicons.min.css'" class="style">
-  <link rel="stylesheet" href="styles.css">
-  <title>Glassmorphism Login Screen</title>
-</head>
-<body>
-  <!-- <img src="background.jpg" id="background"> -->
-  <video src="background.mp4" playInline=true loop=true autoplay=true muted=true id="background"></video>
-  <div id="main-screen">
-    <div class="container">
-      <div class="glass-text-container">
-        <!-- Workaround using SVGfied text as a mask for backdrop-filter application, the only way to implement glassmorphism effect on text -->
-        <div class="glass-effect"></div>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="material-icons/css/materialdesignicons.min.css" onerror="this.href='material-icons/css/materialdesignicons.min.css'" class="style">
+    <link rel="stylesheet" href="styles.css">
+    <title>Glassmorphism Login Screen</title>
+  </head>
+  <body>
+    <!-- <img src="background.jpg" id="background"> -->
+    <video src="background.mp4" playInline=true loop=true autoplay=true muted=true id="background"></video>
+    <div id="main-screen">
+      <div class="container">
+        <div class="glass-text-container">
+          <!-- Workaround using SVGfied text as a mask for backdrop-filter application, the only way to implement glassmorphism effect on text -->
+          <div class="glass-effect"></div>
+        </div>
+        <!-- SVG definitions for the mask -->
+        <svg width="100%" height="auto" viewBox="0 0 1200 300">
+          <defs>
+            <mask id="clock-mask" width="1200" height="300">
+              <rect width="1200" height="300" fill="black"></rect>
+              <text id="date-text" x="50%" y="50" font-size="var(--date-font-size)" font-family="var(--clock-font)" font-weight="var(--date-font-weight)" 
+                text-anchor="middle" dominant-baseline="auto" fill="white">Friday, May 3</text>
+              <text id="time-text" x="50%" y="65" font-size="var(--time-font-size)" font-family="var(--clock-font)" font-weight="var(--time-font-weight)" 
+                text-anchor="middle" dominant-baseline="hanging" fill="white">00:00</text>
+            </mask>
+          </defs>
+        </svg>
       </div>
-
-      <!-- SVG definitions for the mask -->
-      <svg width="100%" height="auto" viewBox="0 0 1200 300">
-        <defs>
-          <mask id="clock-mask" width="1200" height="300">
-            <rect width="1200" height="300" fill="black"></rect>
-            <text id="date-text" x="50%" y="50" font-size="var(--date-font-size)" font-family="var(--clock-font)" font-weight="var(--date-font-weight)" 
-			      text-anchor="middle" dominant-baseline="auto" fill="white">Friday, May 3</text>
-            <text id="time-text" x="50%" y="65" font-size="var(--time-font-size)" font-family="var(--clock-font)" font-weight="var(--time-font-weight)" 
-			      text-anchor="middle" dominant-baseline="hanging" fill="white">00:00</text>
-          </mask>
-        </defs>
-      </svg>
-    </div>
-    
-    <!-- Login Box -->
-    <div id="login-container">
-      <!-- Left side - OS Logo -->
-      <div class="login-logo">
-        <img src="white-arch.svg" alt="Arch Logo" width="180" height="180" draggable=false>
-      </div>
-      
-      <!-- Right side - Login form -->
-      <div id="login-form">
-        <div id="selected-user-pfp-container">
-          <img src="pfp.jpeg" alt="Profile" class="profile-pic" draggable=false>
-          <div class="profile-pic-overlay">
-            <div class="change-user-text unselectable">change<br>user</div>
+      <!-- Login Box -->
+      <div id="login-container">
+        <!-- Left side - OS Logo -->
+        <div class="login-logo">
+          <img src="white-arch.svg" alt="Arch Logo" width="180" height="180" draggable=false>
+        </div>
+        
+        <!-- Right side - Login form -->
+        <div id="login-form">
+          <div id="selected-user-pfp-container">
+            <img src="pfp.jpeg" alt="Profile" class="profile-pic" draggable=false>
+            <div class="profile-pic-overlay">
+              <div class="change-user-text unselectable">change<br>user</div>
+            </div>
+          </div>
+          <div id="selected-user-username" class="username unselectable">John Doe</div>
+          <input type="password" name="password" id="password-input" 
+            autocomplete="off" autofocus="true" placeholder="Enter Password">
+        </div>
+        
+        <!-- User Selection Panel (inside login container) -->
+        <div id="user-selection-panel" class="hidden">
+          <div class="user-selection-header unselectable">Select User</div>
+          <div class="users-table-container">
+            <div id="users-table">
+              <!-- Users will be added here dynamically -->
+            </div>
           </div>
         </div>
-        <div id="selected-user-username" class="username unselectable">John Doe</div>
-
-        <input type="password" name="password" id="password-input" 
-		       autocomplete="off" autofocus="true" placeholder="Enter Password">
-
       </div>
     </div>
-  </div>
-
-  <button id="settings-enter" type="button">
+    <button id="settings-enter" type="button">
     <span class="mdi mdi-cog settings-cog"></span>
-  </button>
-  
-  <!-- Settings Menu -->
-  <div id="settings-menu" class="settings-menu hide">
-    <div class="settings-menu-header unselectable">Settings</div>
-    
-    <div class="settings-menu-item unselectable" id="session-item">
-      <span class="mdi mdi-desktop-classic"></span>
-      Desktop Session
+    </button>
+    <!-- Settings Menu -->
+    <div id="settings-menu" class="settings-menu hide">
+      <div class="settings-menu-header unselectable">Settings</div>
+      <div class="settings-menu-item unselectable" id="session-item">
+        <span class="mdi mdi-desktop-classic"></span>
+        Desktop Session
+      </div>
+      <select id="session-selector">
+        <option value="hyprland">Hyprland</option>
+        <option value="xfce">XFCE</option>
+        <option value="gnome">GNOME</option>
+        <option value="kde">KDE Plasma</option>
+        <option value="i3">i3</option>
+      </select>
+      <div class="settings-menu-separator"></div>
+      <div class="settings-menu-item nice-button unselectable" id="power-item">
+        <span class="mdi mdi-power"></span>
+        Power Off
+      </div>
     </div>
-    <select id="session-selector">
-      <option value="hyprland">Hyprland</option>
-      <option value="xfce">XFCE</option>
-      <option value="gnome">GNOME</option>
-      <option value="kde">KDE Plasma</option>
-      <option value="i3">i3</option>
-    </select>
-    
-    <div class="settings-menu-separator"></div>
-
-    <div class="settings-menu-item nice-button unselectable" id="power-item">
-      <span class="mdi mdi-power"></span>
-      Power Off
-    </div>
-  </div>
-
-  <script src="scripts.js"></script>
-</body>
+    <script src="scripts.js"></script>
+  </body>
 </html>

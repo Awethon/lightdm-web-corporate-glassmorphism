@@ -11,8 +11,8 @@
   --time-font-weight: bold;
   --clock-filter: blur(8px) saturate(150%) contrast(140%) brightness(150%);
   --clock-color: rgba(255, 255, 255, 0.65);
-  --ui-box-color: rgba(255, 255, 255, 0.4); 
-  --ui-box-shadow: 0 8px 32px 0 rgba(38, 38, 40, 0.37); 
+  --ui-box-color: rgba(255, 255, 255, 0.4);
+  --ui-box-shadow: 0 8px 32px 0 rgba(38, 38, 40, 0.37);
   --ui-box-filter: blur(32px) saturate(120%);
   --password-box-color: rgba(255, 255, 255, 0.2);
   --password-box-border: 1px solid rgba(255, 255, 255, 0.4);
@@ -23,9 +23,9 @@
 }
 
 ::selection {
-    background-color: #444;
-    color: white;
-  }
+  background-color: #444;
+  color: white;
+}
 
 body {
   margin: 0;
@@ -33,7 +33,8 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #000; /* Default black background */
+  background-color: #000;
+  /* Default black background */
   font-family: 'Arial', sans-serif;
   overflow: hidden;
 }
@@ -57,7 +58,7 @@ body {
   justify-content: center;
   align-items: center;
   z-index: 1;
-  max-height: calc(65vh - 20px); 
+  max-height: calc(65vh - 20px);
   overflow: visible;
 }
 
@@ -84,13 +85,15 @@ body {
 
 #login-container {
   position: fixed;
-  top: 50%; /* Position below clock */
+  top: 50%;
+  /* Position below clock */
   bottom: auto;
   left: 50%;
   transform: translate(-50%, -10%);
   width: clamp(320px, 50vw, 800px);
   height: clamp(320px, 40vh, 400px);
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr 2fr; /* 1/3 for logo, 2/3 for content */
   z-index: 5;
   background: var(--ui-box-color);
   box-shadow: var(--ui-box-shadow);
@@ -102,7 +105,7 @@ body {
 }
 
 .login-logo {
-  width: 33.33%;
+  grid-column: 1;
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -110,6 +113,8 @@ body {
   justify-content: center;
   border-right: 1px solid rgba(255, 255, 255, 0.5);
   padding: 20px;
+  position: relative;
+  box-sizing: border-box;
 }
 
 .login-logo img {
@@ -119,13 +124,13 @@ body {
 }
 
 #login-form {
-  width: 66.67%;
-  height: 100%;
+  grid-column: 2;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   padding: min(20px, 3vw);
+  box-sizing: border-box;
 }
 
 .username {
@@ -136,12 +141,12 @@ body {
 }
 
 .unselectable {
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 #password-input {
@@ -175,7 +180,7 @@ body {
 
 #settings-enter:hover span::before,
 #settings-enter:focus span::before {
-   transform: rotate(180deg);
+  transform: rotate(180deg);
 }
 
 #settings-enter span::before {
@@ -190,7 +195,7 @@ body {
 }
 
 #main-screen.hidden {
-	opacity: 0;
+  opacity: 0;
 }
 
 .hide {
@@ -198,8 +203,30 @@ body {
   visibility: hidden;
 }
 
+.hidden {
+  transform: translateX(100%);
+  opacity: 0;
+  visibility: hidden;
+}
+
+/* Animation for login form <-> user selection panel transition */
+#login-form {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  transform: translateX(0);
+  opacity: 1;
+}
+
+#login-form.hidden {
+  transform: translateX(-100%);
+  opacity: 0;
+  visibility: hidden;
+}
+
 .settings-cog {
-	color: white;
+  color: white;
 }
 
 .settings-menu {
@@ -263,7 +290,7 @@ body {
 }
 
 #session-selector option {
- background: #444;
+  background: #444;
 }
 
 /* Profile picture hover styles */
@@ -290,7 +317,8 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.7); /* black tint */
+  background-color: rgba(0, 0, 0, 0.7);
+  /* black tint */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -308,4 +336,104 @@ body {
   text-align: center;
   line-height: 1.3;
   font-weight: bold;
+}
+
+/* User Selection Panel Styles */
+#user-selection-panel {
+  grid-column: 2;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  transform: translateX(0);
+  opacity: 1;
+  box-sizing: border-box;
+}
+
+.user-selection-header {
+  color: white;
+  font-size: 22px;
+  margin-bottom: 20px;
+  font-weight: bold;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+  text-align: center;
+  padding-bottom: 10px;
+}
+
+.users-table-container {
+  flex: 1;
+  overflow-y: auto;
+  margin-right: -10px;
+  padding-right: 10px;
+}
+
+/* Custom scrollbar for the user selection container */
+.users-table-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.users-table-container::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+}
+
+.users-table-container::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 3px;
+}
+
+.users-table-container::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.4);
+}
+
+#users-table {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+  justify-items: center;
+  margin-bottom: 10px;
+  box-sizing: border-box;
+}
+
+.user-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 90%; /* Reduced width to prevent overlap */
+  cursor: pointer;
+  padding: 10px;
+  border-radius: 8px;
+  transition: background-color 0.2s;
+  box-sizing: border-box;
+  margin: 0 auto; /* Center each item in its grid cell */
+}
+
+.user-item:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+.user-item-pfp-container {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+
+.user-item-pfp {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.user-item-name {
+  color: white;
+  font-size: 16px;
+  text-align: center;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
