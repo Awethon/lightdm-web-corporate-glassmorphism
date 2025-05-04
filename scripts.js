@@ -1,40 +1,24 @@
 // Check for background files
 function setupBackground() {
+  const backgroundFile = "background.mp4"
   const imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
   const videoExtensions = ['mp4', 'webm'];
-  let backgroundElement = null;
+  
+  const ext = backgroundFile.split('.').pop().toLowerCase();
 
-  // Try to find a background file
-  for (const ext of [...videoExtensions, ...imageExtensions]) {
-    const url = `background.${ext}`;
 
-    // Use fetch to check if the file exists
-    fetch(url, {
-        method: 'HEAD'
-      })
-      .then(response => {
-        if (response.ok && !backgroundElement) {
-          // Create the appropriate element based on extension
-          if (videoExtensions.includes(ext)) {
-            backgroundElement = document.createElement('video');
-            backgroundElement.autoplay = true;
-            backgroundElement.loop = true;
-            backgroundElement.muted = true;
-            backgroundElement.playsInline = true;
-          }
-          else {
-            backgroundElement = document.createElement('img');
-          }
-
-          // Set common attributes
-          backgroundElement.id = 'background';
-          backgroundElement.src = url;
-          document.body.insertBefore(backgroundElement, document.body.firstChild);
-        }
-      })
-      .catch(() => {
-        // Silently ignore file not found errors
-      });
+  if (videoExtensions.includes(ext)) {
+    const video = document.querySelector('video.background');
+    if (video) {
+      video.src = backgroundFile;
+      video.classList.remove('hidden');
+    }
+  } else if (imageExtensions.includes(ext)) {
+    const img = document.querySelector('img.background');
+    if (img) {
+      img.src = backgroundFile;
+      img.classList.remove('hidden');
+    }
   }
 }
 
@@ -391,8 +375,8 @@ function mockData() {
 
 // Initialize everything when the DOM is fully loaded
 document.addEventListener('DOMContentLoaded', () => {
-  // mockData(); /* Uncomment to test in your browser */
-  setupBackground(); /* Comment to test in your browser */
+  mockData(); /* Uncomment to test in your browser */
+  setupBackground();
   updateTime();
   setupSettingsMenu();
   fetchOSDataAndUpdateUI();

@@ -8,8 +8,9 @@
     <title>Glassmorphism Login Screen</title>
   </head>
   <body>
-    <!-- <img src="background.jpg" id="background"> --> <!-- Uncomment to test img background in your browser -->
-    <!-- <video src="background.mp4" playInline=true loop=true autoplay=true muted=true id="background"></video> --> <!-- Uncomment to test video background in your browser -->
+    <img src="background.jpg" class="background hidden">
+    <video src="background.mp4" class="background hidden" 
+	       playInline=true loop=true autoplay=true muted=true></video>
     <div id="main-screen">
       <div class="container">
         <div class="glass-text-container">
@@ -17,7 +18,7 @@
           <div class="glass-effect"></div>
         </div>
         <!-- SVG definitions for the mask -->
-        <svg width="100%" height="auto" viewBox="0 0 1200 300">
+        <svg width="100%" height="100%" viewBox="0 0 1200 300">
           <defs>
             <mask id="clock-mask" width="1200" height="300">
               <rect width="1200" height="300" fill="black"></rect>
