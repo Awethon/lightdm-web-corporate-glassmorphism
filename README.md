@@ -1,0 +1,1 @@
+# LightDM Corporate Glassmorphism Theme
