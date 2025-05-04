@@ -80,9 +80,7 @@ function setupSettingsMenu() {
   powerItem.addEventListener('click', () => {
 	// TODO: make custom confirmation window
     if (confirm('Are you sure you want to power off the system?')) {
-      console.log('Power off requested');
-      // Here you would typically call a system command to power off
-      // For demo purposes, we'll just log it
+      window.lightdm.shutdown();
     }
   });
 }
