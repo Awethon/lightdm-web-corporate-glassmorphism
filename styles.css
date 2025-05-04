@@ -1,12 +1,31 @@
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Monoton&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plaster&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&display=swap');
 
 :root {
-  --clock-font: 'Press Start 2P', cursive;
+  --clock-font: 'Bodoni Moda', cursive;
   --date-font-size: min(2.5vw, 50px);
-  --time-font-size: min(7vw, 150px);
+  --time-font-size: min(1.25*7vw, 1.25*150px);
+  --date-font-weight: normal;
+  --time-font-weight: bold;
   --clock-filter: blur(8px) saturate(150%) contrast(140%) brightness(150%);
   --clock-color: rgba(255, 255, 255, 0.65);
+  --ui-box-color: rgba(255, 255, 255, 0.4); 
+  --ui-box-shadow: 0 8px 32px 0 rgba(38, 38, 40, 0.37); 
+  --ui-box-filter: blur(32px) saturate(120%);
+  --password-box-color: rgba(255, 255, 255, 0.2);
+  --password-box-border: 1px solid rgba(255, 255, 255, 0.4);
+  --password-placeholder-font-color: rgba(255, 255, 255, 0.7);
+  --settings-header-separation-line: 1px solid rgba(255, 255, 255, 0.3);
+  --session-selector-box-color: rgba(255, 255, 255, 0.2);
+  --session-selector-box-border: 1px solid rgba(255, 255, 255, 0.4);
 }
+
+::selection {
+    background-color: #444;
+    color: white;
+  }
 
 body {
   margin: 0;
@@ -31,7 +50,7 @@ body {
 
 .container {
   position: fixed;
-  top: 5vh;
+  top: 0;
   left: 0;
   right: 0;
   display: flex;
@@ -43,6 +62,7 @@ body {
 }
 
 .glass-text-container {
+  top: 10vh;
   position: fixed;
   width: 1200px;
   height: 300px;
@@ -62,21 +82,20 @@ body {
   background-color: var(--clock-color);
 }
 
-.login-container {
+#login-container {
   position: fixed;
-  top: calc(5vh + 300px + 5vh); /* Position below clock */
+  top: 50%; /* Position below clock */
   bottom: auto;
   left: 50%;
-  transform: translateX(-50%);
-  width: 40%;
-  height: 20vw;
-  min-height: 320px;
+  transform: translate(-50%, -10%);
+  width: clamp(320px, 50vw, 800px);
+  height: clamp(320px, 40vh, 400px);
   display: flex;
   z-index: 5;
-  background: rgba(255, 255, 255, 0.4);
-  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  background: var(--ui-box-color);
+  box-shadow: var(--ui-box-shadow);
+  backdrop-filter: var(--ui-box-filter);
+  -webkit-backdrop-filter: var(--ui-box-filter);
   border-radius: 10px;
   overflow: hidden;
   margin-top: auto;
@@ -99,7 +118,7 @@ body {
   object-fit: contain;
 }
 
-.login-form {
+#login-form {
   width: 66.67%;
   height: 100%;
   display: flex;
@@ -109,22 +128,6 @@ body {
   padding: min(20px, 3vw);
 }
 
-.placeholder-circle {
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.6);
-  margin-bottom: 20px;
-}
-
-.profile-circle {
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.6);
-  margin-bottom: 15px;
-}
-
 .username {
   color: white;
   font-size: 24px;
@@ -132,18 +135,27 @@ body {
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
 }
 
-.password-input {
+.unselectable {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+#password-input {
   width: 80%;
   padding: 12px;
-  background: rgba(255, 255, 255, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.4);
+  background: var(--password-box-color);
+  border: var(--password-box-border);
   border-radius: 5px;
   color: white;
   font-size: 16px;
   outline: none;
 }
 
-.password-input::placeholder {
+#password-input::placeholder {
   color: rgba(255, 255, 255, 0.7);
 }
 
@@ -174,6 +186,11 @@ body {
   position: relative;
   width: 100%;
   height: 100%;
+  transition: opacity 0.9s ease;
+}
+
+#main-screen.hidden {
+	opacity: 0;
 }
 
 .hide {
@@ -181,15 +198,19 @@ body {
   visibility: hidden;
 }
 
+.settings-cog {
+	color: white;
+}
+
 .settings-menu {
   position: absolute;
-  bottom: 70px;
-  left: 10px;
+  bottom: 10vh;
+  left: 15px;
   width: 300px;
-  background: rgba(255, 255, 255, 0.4);
-  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  background: var(--ui-box-color);
+  box-shadow: var(--ui-box-shadow);
+  backdrop-filter: var(--ui-box-filter);
+  -webkit-backdrop-filter: var(--ui-box-filter);
   border-radius: 10px;
   padding: 20px;
   z-index: 10;
@@ -202,7 +223,7 @@ body {
   margin-bottom: 15px;
   font-weight: bold;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+  border-bottom: var(--settings-header-separation-line);
   padding-bottom: 10px;
 }
 
@@ -211,11 +232,11 @@ body {
   align-items: center;
   color: white;
   padding: 10px 0;
-  cursor: pointer;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 
-.settings-menu-item:hover {
+.nice-button:hover {
+  cursor: pointer;
   background: rgba(255, 255, 255, 0.2);
   border-radius: 5px;
   padding: 10px;
@@ -226,10 +247,14 @@ body {
   margin-right: 10px;
 }
 
-.session-selector {
+.settings-menu-separator {
+  height: 6px;
+}
+
+#session-selector {
   width: 100%;
-  background: rgba(255, 255, 255, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.4);
+  background: var(--session-selector-box-color);
+  border: var(--session-selector-box-border);
   border-radius: 5px;
   padding: 8px;
   color: white;
@@ -237,12 +262,12 @@ body {
   outline: none;
 }
 
-.session-selector option {
-  background: #444;
+#session-selector option {
+ background: #444;
 }
 
 /* Profile picture hover styles */
-.profile-pic-container {
+#selected-user-pfp-container {
   position: relative;
   width: 120px;
   height: 120px;
@@ -265,7 +290,7 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.7); /* Strong black tint */
+  background-color: rgba(0, 0, 0, 0.7); /* black tint */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -273,7 +298,7 @@ body {
   transition: opacity 0.3s ease;
 }
 
-.profile-pic-container:hover .profile-pic-overlay {
+#selected-user-pfp-container:hover .profile-pic-overlay {
   opacity: 1;
 }
 

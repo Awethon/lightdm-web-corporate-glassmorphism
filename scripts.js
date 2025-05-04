@@ -78,23 +78,214 @@ function setupSettingsMenu() {
   
   // Power button functionality
   powerItem.addEventListener('click', () => {
+	// TODO: make custom confirmation window
     if (confirm('Are you sure you want to power off the system?')) {
       console.log('Power off requested');
       // Here you would typically call a system command to power off
       // For demo purposes, we'll just log it
     }
   });
-  
-  // Session selector functionality
-  sessionSelector.addEventListener('change', () => {
-    console.log(`Session changed to: ${sessionSelector.value}`);
-    // Here you would typically save this selection for the login process
-  });
+}
+
+function fetchOSDataAndUpdateUI() {
+	/* Default User Section */
+	const usernameElem = document.querySelector("#selected-user-username")
+	const picContainerElem = document.querySelector("#selected-user-pfp-container");
+	const pfpElem = picContainerElem.querySelector("img");
+	
+	const users = window.lightdm.users;
+	const defaultUser = users[0]; /* TODO: make it stateful, make users list and fill it */
+	
+	// fuck JS
+    function nameToDisplayFunc() {
+	  if (defaultUser.display_name) {
+		return defaultUser.display_name;
+	  } else if (defaultUser.username) {
+		  return defaultUser.username;
+	  } else {
+		  return "Unknown Name";
+	  }
+	}
+	
+	const nameToDisplay = nameToDisplayFunc();
+	
+	usernameElem.innerHTML = nameToDisplay;
+	if (defaultUser.image) { pfpElem.src = defaultUser.image; }
+	/* Default User Section END */
+	
+	/* Sessions Section */
+	const sessionSelector = document.querySelector("#session-selector");
+	const availableSessions = window.lightdm.sessions;
+	
+	sessionSelector.innerHTML = '';
+	for (const s of availableSessions) {
+		const sessionOption = document.createElement('option');
+		sessionOption.value = s.name;
+		sessionOption.textContent = s.name;
+		sessionSelector.appendChild(sessionOption);
+	}
+	
+	// fuck JS
+	function sessionNameToUseFunc() { 
+	  if (defaultUser.session) {
+		  return defaultUser.session;
+	  } else if (availableSessions.length > 0) {
+		  return availableSessions[0].key;
+	  } else {
+		  return window.lightdm.default_session;
+	  }
+	}
+	
+	const preSelectedSessionNameToUse = sessionNameToUseFunc();
+	const preSelectedSessionToUse = availableSessions.find(s => s.key == preSelectedSessionNameToUse);
+	sessionSelector.value = preSelectedSessionToUse.name;
+	/* Sessions Section END */
+	
+	/* Authentication Section */
+	const passwordInputElem = document.querySelector("#password-input");
+	
+	window.lightdm.authentication_complete.connect(async () => {
+      if (window.lightdm.is_authenticated) {
+        const selectedSessionName = sessionSelector.value;
+		const selectedSession = availableSessions.find(s => s.name == selectedSessionName);
+		document.querySelector("#main-screen").classList.add("hidden");
+		await window.wait(1000);
+		window.lightdm.start_session(selectedSession.key ?? null);
+      } else {
+        passwordInputElem.disabled = false;
+		passwordInputElem.focus();
+		passwordInputElem.select();
+      }
+    });
+	
+	passwordInputElem.addEventListener('keypress', (e) => {
+		if (e.key === 'Enter') {
+			e.preventDefault();
+			
+			window.lightdm.cancel_authentication();
+			window.lightdm.authenticate(defaultUser.username ?? null);
+			const password = passwordInputElem.value ?? "";
+			passwordInputElem.blur();
+			passwordInputElem.disabled = true;
+			window.lightdm.respond(password);
+		}
+	});
+
+    
+	/* Authentication Section END */
+}
+
+function mockData() {
+  // Mock data for users - only includes fields actually used in the code
+  const mockUsers = [
+    {
+      username: "user1",
+      display_name: "Patrick Bateman",
+      image: null,
+      session: "gnome"
+    },
+    {
+      username: "user2", 
+      display_name: "User Two",
+      image: null,
+      session: "kde-plasma"
+    },
+    {
+      username: "admin",
+      display_name: "Administrator",
+      image: null,
+      session: "xfce"
+    }
+  ];
+
+  // Mock data for sessions - only includes fields actually used in the code
+  const mockSessions = [
+    {
+      key: "gnome",
+      name: "GNOME"
+    },
+    {
+      key: "kde-plasma",
+      name: "KDE Plasma"
+    },
+    {
+      key: "xfce",
+      name: "XFCE"
+    }
+  ];
+
+  // Mock LightDM interface with only the properties and methods used in the code
+  window.lightdm = {
+    // Properties
+    users: mockUsers,
+    sessions: mockSessions,
+    default_session: "gnome",
+    is_authenticated: false,
+
+    // Signal callback handlers - only authentication_complete is used
+    authentication_complete: {
+      callbacks: [],
+      connect: function(callback) {
+        this.callbacks.push(callback);
+      },
+      emit: function() {
+        this.callbacks.forEach(callback => callback());
+      }
+    },
+
+    // Authentication methods
+    authenticate: function(username) {
+      console.log(`Authenticating user: ${username}`);
+      return true;
+    },
+
+    respond: function(password) {
+      console.log("Password received, validating...");
+      
+      // Accept only "password" as the valid password for all users
+      this.is_authenticated = (password === "password");
+      
+      if (this.is_authenticated) {
+        console.log("Authentication successful");
+      } else {
+        console.log("Authentication failed");
+      }
+      
+      this.authentication_complete.emit();
+    },
+
+    cancel_authentication: function() {
+      console.log("Authentication cancelled");
+      this.is_authenticated = false;
+      return true;
+    },
+
+    // Session methods
+    start_session: function(session_key) {
+      if (!this.is_authenticated) {
+        console.error("Cannot start session: not authenticated");
+        return false;
+      }
+
+      const session = session_key || this.default_session;
+      console.log(`Starting session: ${session}`);
+      return true;
+    }
+  };
+
+  // Helper function for simulating asynchronous operations - used in the code
+  window.wait = function(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  };
+
+  console.log("LightDM mock initialized");
 }
 
 // Initialize everything when the DOM is fully loaded
 document.addEventListener('DOMContentLoaded', () => {
-  setupBackground();
+  mockData();
+  // setupBackground();
   updateTime();
   setupSettingsMenu();
+  fetchOSDataAndUpdateUI();
 });
