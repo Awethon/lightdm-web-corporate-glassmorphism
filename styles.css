@@ -86,7 +86,6 @@ body {
 #login-container {
   position: fixed;
   top: 50%;
-  /* Position below clock */
   bottom: auto;
   left: 50%;
   transform: translate(-50%, -10%);
@@ -194,7 +193,7 @@ body {
   transition: opacity 0.9s ease;
 }
 
-#main-screen.hidden {
+#main-screen.invisible {
   opacity: 0;
 }
 

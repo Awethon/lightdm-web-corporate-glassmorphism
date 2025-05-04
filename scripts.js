@@ -213,10 +213,10 @@ function fetchOSDataAndUpdateUI() {
     sessionSelector.appendChild(sessionOption);
   }
 
-  // fuck JS
+ 
   function sessionNameToUseFunc() {
-    if (defaultUser.session) {
-      return defaultUser.session;
+    if (selectedUser.session) {
+      return selectedUser.session;
     }
     else if (availableSessions.length > 0) {
       return availableSessions[0].key;
@@ -238,7 +238,7 @@ function fetchOSDataAndUpdateUI() {
     if (window.lightdm.is_authenticated) {
       const selectedSessionName = sessionSelector.value;
       const selectedSession = availableSessions.find(s => s.name == selectedSessionName);
-      document.querySelector("#main-screen").classList.add("hidden");
+      document.querySelector("#main-screen").classList.add("invisible");
       await window.wait(1000);
       window.lightdm.start_session(selectedSession.key ?? null);
     }
@@ -391,8 +391,8 @@ function mockData() {
 
 // Initialize everything when the DOM is fully loaded
 document.addEventListener('DOMContentLoaded', () => {
-  mockData();
-  // setupBackground();
+  // mockData(); /* Uncomment to test in your browser */
+  setupBackground(); /* Comment to test in your browser */
   updateTime();
   setupSettingsMenu();
   fetchOSDataAndUpdateUI();
