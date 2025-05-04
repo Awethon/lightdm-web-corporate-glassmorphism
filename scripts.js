@@ -375,7 +375,7 @@ function mockData() {
 
 // Initialize everything when the DOM is fully loaded
 document.addEventListener('DOMContentLoaded', () => {
-  mockData(); /* Uncomment to test in your browser */
+  // mockData(); /* Uncomment to test in your browser */
   setupBackground();
   updateTime();
   setupSettingsMenu();
