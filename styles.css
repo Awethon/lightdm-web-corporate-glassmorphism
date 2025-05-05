@@ -423,6 +423,83 @@ body {
   background: rgba(255, 255, 255, 0.4);
 }
 
+/* On-screen console styles */
+#on-screen-console {
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+  width: 400px;
+  max-height: 200px;
+  background: rgba(0, 0, 0, 0.7);
+  color: #33ff33;
+  font-family: monospace;
+  font-size: 12px;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  overflow-y: auto;
+  z-index: 1000;
+  transition: opacity 0.3s ease;
+}
+
+#on-screen-console.hidden {
+  opacity: 0;
+  visibility: hidden;
+}
+
+#console-header {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+  padding-bottom: 5px;
+  margin-bottom: 5px;
+}
+
+#console-header .title {
+  font-weight: bold;
+}
+
+#console-header .controls span {
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+#console-content {
+  max-height: 150px;
+  overflow-y: auto;
+}
+
+#console-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+#console-content::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+}
+
+#console-content::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 3px;
+}
+
+#console-content::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.4);
+}
+
+#console-content .log-entry {
+  margin-bottom: 3px;
+  word-wrap: break-word;
+}
+
+#console-content .log-entry.error {
+  color: #ff5555;
+}
+
+#console-content .log-entry.warn {
+  color: #ffff55;
+}
+
 #users-table {
   display: grid;
   grid-template-columns: repeat(2, 1fr);

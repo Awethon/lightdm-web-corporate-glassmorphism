@@ -415,5 +415,124 @@ document.addEventListener('DOMContentLoaded', () => {
   setupBackground();
   updateTime();
   setupSettingsMenu();
+  setupOnScreenConsole();
   fetchOSDataAndUpdateUI();
 });
+
+// Setup the on-screen console functionality
+function setupOnScreenConsole() {
+  const console = document.getElementById('on-screen-console');
+  const consoleContent = document.getElementById('console-content');
+  const consoleClear = document.getElementById('console-clear');
+  const consoleToggle = document.getElementById('console-toggle');
+  
+  // Override console methods to capture logs
+  const originalConsoleLog = window.console.log;
+  const originalConsoleWarn = window.console.warn;
+  const originalConsoleError = window.console.error;
+  
+  // Save console history
+  const consoleHistory = [];
+  const MAX_HISTORY = 100;
+  
+  // Toggle console visibility
+  consoleToggle.addEventListener('click', () => {
+    if (console.classList.contains('hidden')) {
+      console.classList.remove('hidden');
+      consoleToggle.textContent = '▼';
+      consoleToggle.title = 'Hide console';
+    } else {
+      console.classList.add('hidden');
+      consoleToggle.textContent = '▲';
+      consoleToggle.title = 'Show console';
+    }
+  });
+  
+  // Add keyboard shortcut (Ctrl+`) to toggle console
+  document.addEventListener('keydown', (e) => {
+    if (e.ctrlKey && e.key === '`') {
+      e.preventDefault();
+      console.classList.toggle('hidden');
+      if (console.classList.contains('hidden')) {
+        consoleToggle.textContent = '▲';
+        consoleToggle.title = 'Show console';
+      } else {
+        consoleToggle.textContent = '▼';
+        consoleToggle.title = 'Hide console';
+      }
+    }
+  });
+  
+  // Clear console
+  consoleClear.addEventListener('click', () => {
+    consoleContent.innerHTML = '';
+    consoleHistory.length = 0;
+  });
+  
+  // Format and add log to the console
+  function addLogToConsole(type, ...args) {
+    const entry = document.createElement('div');
+    entry.className = `log-entry ${type}`;
+    
+    // Convert arguments to string representation
+    let logText = '';
+    args.forEach(arg => {
+      if (typeof arg === 'object' && arg !== null) {
+        try {
+          logText += JSON.stringify(arg) + ' ';
+        } catch (e) {
+          logText += arg + ' ';
+        }
+      } else {
+        logText += arg + ' ';
+      }
+    });
+    
+    // Add timestamp
+    const now = new Date();
+    const timestamp = [
+      now.getHours().toString().padStart(2, '0'),
+      now.getMinutes().toString().padStart(2, '0'),
+      now.getSeconds().toString().padStart(2, '0')
+    ].join(':');
+    
+    entry.textContent = `[${timestamp}] ${logText}`;
+    consoleContent.appendChild(entry);
+    
+    // Store in history
+    consoleHistory.push({ type, text: logText, timestamp });
+    if (consoleHistory.length > MAX_HISTORY) {
+      consoleHistory.shift();
+    }
+    
+    // Auto-scroll to bottom
+    consoleContent.scrollTop = consoleContent.scrollHeight;
+    
+    // Show console if hidden (for errors)
+    if (type === 'error' && console.classList.contains('hidden')) {
+      console.classList.remove('hidden');
+      consoleToggle.textContent = '▼';
+      consoleToggle.title = 'Hide console';
+    }
+  }
+  
+  // Override console methods
+  window.console.log = function(...args) {
+    originalConsoleLog.apply(window.console, args);
+    addLogToConsole('log', ...args);
+  };
+  
+  window.console.warn = function(...args) {
+    originalConsoleWarn.apply(window.console, args);
+    addLogToConsole('warn', ...args);
+  };
+  
+  window.console.error = function(...args) {
+    originalConsoleError.apply(window.console, args);
+    addLogToConsole('error', ...args);
+  };
+  
+  // Show console with initial message
+  console.classList.remove('hidden');
+  window.console.log('On-screen console initialized. Press Ctrl+` to toggle visibility.');
+}
