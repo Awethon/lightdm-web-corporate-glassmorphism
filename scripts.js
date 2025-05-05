@@ -1,6 +1,6 @@
 // Check for background files
 function setupBackground() {
-  const backgroundFile = "background.mp4"
+  const backgroundFile = "backgrounds/background.mp4"
   const imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
   const videoExtensions = ['mp4', 'webm'];
   
@@ -105,7 +105,7 @@ function fetchOSDataAndUpdateUI() {
       
       const pfp = document.createElement('img');
       pfp.className = 'user-item-pfp';
-      pfp.src = user.image || 'pfp.jpeg'; // Use default if no image
+      pfp.src = user.image || 'default-pfp.jpeg'; // Use default if no image
       pfp.alt = user.display_name || user.username;
       pfp.draggable = false;
       
@@ -167,7 +167,7 @@ function fetchOSDataAndUpdateUI() {
     if (selectedUser.image) {
       pfpElem.src = selectedUser.image;
     } else {
-      pfpElem.src = 'pfp.jpeg'; // Default image
+      pfpElem.src = 'default-pfp.jpeg'; // Default image
     }
   }
   
@@ -280,37 +280,37 @@ function mockData() {
   const mockUsers = [{
       username: "user1",
       display_name: "Patrick Bateman",
-      image: "pfp.jpeg",
+      image: "default-pfp.jpeg",
       session: "gnome"
     },
     {
       username: "user2",
       display_name: "User Two",
-      image: "pfp.jpeg",
+      image: "default-pfp.jpeg",
       session: "kde-plasma"
     },
     {
       username: "admin",
       display_name: "Administrator",
-      image: "pfp.jpeg",
+      image: "default-pfp.jpeg",
       session: "xfce"
     },
     {
       username: "guest",
       display_name: "Guest User",
-      image: "pfp.jpeg",
+      image: "default-pfp.jpeg",
       session: "gnome"
     },
     {
       username: "dev",
       display_name: "Developer",
-      image: "pfp.jpeg",
+      image: "default-pfp.jpeg",
       session: "xfce"
     },
     {
       username: "test",
       display_name: "Test User",
-      image: "pfp.jpeg",
+      image: "default-pfp.jpeg",
       session: "kde-plasma"
     }
   ];
