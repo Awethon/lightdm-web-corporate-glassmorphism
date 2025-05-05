@@ -1,3 +1,7 @@
+window.wait = function (ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+};
+
 // Check for background files
 function setupBackground() {
   const backgroundFile = "backgrounds/background.mp4"
@@ -255,10 +259,10 @@ function fetchOSDataAndUpdateUI() {
       console.log(`Selected user session: ${selectedUser.session}`);
       
       window.lightdm.cancel_authentication();
-      await window.wait(200);
+      await window.wait(50);
       console.log(`Calling authenticate with username: ${selectedUser.username ?? "null"}`);
       window.lightdm.authenticate(selectedUser.username ?? null);
-      await window.wait(200);
+      await window.wait(50);
       
       const password = passwordInputElem.value ?? "";
       console.log(`Password entered: ${password.replace(/./g, '*')}`);
@@ -401,11 +405,6 @@ function mockData() {
     }
   };
 
-  // Helper function for simulating asynchronous operations - used in the code
-  window.wait = function (ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-  };
-
   console.log("LightDM mock initialized");
 }
 
@@ -423,8 +422,6 @@ document.addEventListener('DOMContentLoaded', () => {
 function setupOnScreenConsole() {
   const console = document.getElementById('on-screen-console');
   const consoleContent = document.getElementById('console-content');
-  const consoleClear = document.getElementById('console-clear');
-  const consoleToggle = document.getElementById('console-toggle');
   
   // Override console methods to capture logs
   const originalConsoleLog = window.console.log;
@@ -435,38 +432,12 @@ function setupOnScreenConsole() {
   const consoleHistory = [];
   const MAX_HISTORY = 100;
   
-  // Toggle console visibility
-  consoleToggle.addEventListener('click', () => {
-    if (console.classList.contains('hidden')) {
-      console.classList.remove('hidden');
-      consoleToggle.textContent = '▼';
-      consoleToggle.title = 'Hide console';
-    } else {
-      console.classList.add('hidden');
-      consoleToggle.textContent = '▲';
-      consoleToggle.title = 'Show console';
-    }
-  });
-  
   // Add keyboard shortcut (Ctrl+`) to toggle console
   document.addEventListener('keydown', (e) => {
     if (e.ctrlKey && e.key === '`') {
       e.preventDefault();
       console.classList.toggle('hidden');
-      if (console.classList.contains('hidden')) {
-        consoleToggle.textContent = '▲';
-        consoleToggle.title = 'Show console';
-      } else {
-        consoleToggle.textContent = '▼';
-        consoleToggle.title = 'Hide console';
-      }
     }
-  });
-  
-  // Clear console
-  consoleClear.addEventListener('click', () => {
-    consoleContent.innerHTML = '';
-    consoleHistory.length = 0;
   });
   
   // Format and add log to the console
@@ -511,8 +482,6 @@ function setupOnScreenConsole() {
     // Show console if hidden (for errors)
     if (type === 'error' && console.classList.contains('hidden')) {
       console.classList.remove('hidden');
-      consoleToggle.textContent = '▼';
-      consoleToggle.title = 'Hide console';
     }
   }
   
@@ -532,7 +501,5 @@ function setupOnScreenConsole() {
     addLogToConsole('error', ...args);
   };
   
-  // Show console with initial message
-  console.classList.remove('hidden');
   window.console.log('On-screen console initialized. Press Ctrl+` to toggle visibility.');
 }
