@@ -235,10 +235,24 @@ function fetchOSDataAndUpdateUI() {
       const selectedSession = availableSessions.find(s => s.name == selectedSessionName);
       console.log(`Selected session key: ${selectedSession.key}`);
       
+      // Fade background to black
+      const backgroundImg = document.querySelector('img.background');
+      const backgroundVideo = document.querySelector('video.background');
+      
+      if (backgroundImg && !backgroundImg.classList.contains('hidden')) {
+        backgroundImg.style.transition = 'opacity 0.75s ease';
+        backgroundImg.style.opacity = '0';
+      }
+      
+      if (backgroundVideo && !backgroundVideo.classList.contains('hidden')) {
+        backgroundVideo.style.transition = 'opacity 0.75s ease';
+        backgroundVideo.style.opacity = '0';
+      }
+      
       document.querySelector("#main-screen").classList.add("invisible");
       console.log("Main screen hidden, waiting to start session...");
       
-      await window.wait(1000);
+      await window.wait(750);
       console.log(`Starting session with key: ${selectedSession.key ?? "default"}`);
       window.lightdm.start_session(selectedSession.key ?? null);
     }
