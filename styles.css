@@ -1,7 +1,10 @@
-@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Monoton&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Plaster&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&display=swap');
+@font-face {
+  font-family: 'Bodoni Moda';
+  src: url('fonts/BodoniModa.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+  font-optical-sizing: auto; /* Enable optical sizing */
+}
 
 :root {
   --clock-font: 'Bodoni Moda', cursive;
