@@ -221,29 +221,52 @@ function fetchOSDataAndUpdateUI() {
   const passwordInputElem = document.querySelector("#password-input");
 
   window.lightdm.authentication_complete.connect(async () => {
+    console.log("Authentication complete callback triggered");
+    console.log(`Authentication result: ${window.lightdm.is_authenticated ? "SUCCESS" : "FAILED"}`);
+    
     if (window.lightdm.is_authenticated) {
       const selectedSessionName = sessionSelector.value;
+      console.log(`Selected session name: ${selectedSessionName}`);
+      
       const selectedSession = availableSessions.find(s => s.name == selectedSessionName);
+      console.log(`Selected session key: ${selectedSession.key}`);
+      
       document.querySelector("#main-screen").classList.add("invisible");
+      console.log("Main screen hidden, waiting to start session...");
+      
       await window.wait(1000);
+      console.log(`Starting session with key: ${selectedSession.key ?? "default"}`);
       window.lightdm.start_session(selectedSession.key ?? null);
     }
     else {
+      console.log("Authentication failed, resetting password field");
       passwordInputElem.disabled = false;
       passwordInputElem.focus();
       passwordInputElem.select();
     }
   });
 
-  passwordInputElem.addEventListener('keypress', (e) => {
+  passwordInputElem.addEventListener('keypress', async (e) => {
     if (e.key === 'Enter') {
       e.preventDefault();
-
+      
+      console.log(`Authentication process starting for user: ${selectedUser.username}`);
+      console.log(`Selected user display name: ${selectedUser.display_name}`);
+      console.log(`Selected user session: ${selectedUser.session}`);
+      
       window.lightdm.cancel_authentication();
+      await window.wait(200);
+      console.log(`Calling authenticate with username: ${selectedUser.username ?? "null"}`);
       window.lightdm.authenticate(selectedUser.username ?? null);
+      await window.wait(200);
+      
       const password = passwordInputElem.value ?? "";
+      console.log(`Password entered: ${password.replace(/./g, '*')}`);
+      console.log(`Password length: ${password.length}`);
+      
       passwordInputElem.blur();
       passwordInputElem.disabled = true;
+      console.log("Sending password to lightdm.respond()");
       window.lightdm.respond(password);
     }
   });
@@ -328,28 +351,32 @@ function mockData() {
 
     // Authentication methods
     authenticate: function (username) {
-      console.log(`Authenticating user: ${username}`);
+      console.log(`[MOCK] Authenticating user: ${username}`);
+      console.log(`[MOCK] Available users: ${this.users.map(u => u.username).join(', ')}`);
       return true;
     },
 
     respond: function (password) {
-      console.log("Password received, validating...");
+      console.log("[MOCK] Password received, validating...");
+      console.log(`[MOCK] Password length: ${password.length}`);
+      console.log(`[MOCK] Expected valid password: "password"`);
 
       // Accept only "password" as the valid password for all users
       this.is_authenticated = (password === "password");
 
       if (this.is_authenticated) {
-        console.log("Authentication successful");
+        console.log("[MOCK] Authentication successful");
       }
       else {
-        console.log("Authentication failed");
+        console.log(`[MOCK] Authentication failed - password "${password}" does not match "password"`);
       }
 
+      console.log("[MOCK] Triggering authentication_complete callbacks");
       this.authentication_complete.emit();
     },
 
     cancel_authentication: function () {
-      console.log("Authentication cancelled");
+      console.log("[MOCK] Authentication cancelled");
       this.is_authenticated = false;
       return true;
     },
@@ -357,12 +384,19 @@ function mockData() {
     // Session methods
     start_session: function (session_key) {
       if (!this.is_authenticated) {
-        console.error("Cannot start session: not authenticated");
+        console.error("[MOCK] Cannot start session: not authenticated");
         return false;
       }
 
       const session = session_key || this.default_session;
-      console.log(`Starting session: ${session}`);
+      console.log(`[MOCK] Starting session: ${session}`);
+      console.log(`[MOCK] Available sessions: ${this.sessions.map(s => `${s.name}(${s.key})`).join(', ')}`);
+      console.log(`[MOCK] Default session: ${this.default_session}`);
+      
+      // Check if the provided session exists
+      const sessionExists = this.sessions.some(s => s.key === session);
+      console.log(`[MOCK] Session '${session}' exists: ${sessionExists}`);
+      
       return true;
     }
   };
