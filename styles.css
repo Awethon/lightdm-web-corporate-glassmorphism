@@ -83,6 +83,36 @@ body {
   background-color: var(--clock-color);
 }
 
+/* Fallback clock styles */
+.fallback-clock {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  color: white;
+  font-family: var(--clock-font);
+  text-align: center;
+}
+
+.fallback-date {
+  position: absolute;
+  top: 100px;
+  left: 0;
+  width: 100%;
+  font-size: var(--date-font-size);
+  font-weight: var(--date-font-weight);
+}
+
+.fallback-time {
+  position: absolute;
+  top: 130px;
+  left: 0;
+  width: 100%;
+  font-size: var(--time-font-size);
+  font-weight: var(--time-font-weight);
+}
+
 #login-container {
   position: fixed;
   top: 50%;

@@ -31,6 +31,7 @@ function updateTime() {
   const minutes = now.getMinutes().toString().padStart(2, '0');
   const timeString = `${hours}:${minutes}`;
   document.getElementById('time-text').textContent = timeString;
+  document.getElementById('fallback-time').textContent = timeString;
 
   // Update date
   const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
@@ -40,6 +41,7 @@ function updateTime() {
   const dayOfMonth = now.getDate();
   const dateString = `${dayOfWeek}, ${month} ${dayOfMonth}`;
   document.getElementById('date-text').textContent = dateString;
+  document.getElementById('fallback-date').textContent = dateString;
 
   requestAnimationFrame(updateTime);
 }

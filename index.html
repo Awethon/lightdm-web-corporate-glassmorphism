@@ -13,12 +13,12 @@
 	       playInline=true loop=true autoplay=true muted=true></video>
     <div id="main-screen">
       <div class="container">
-        <div class="glass-text-container">
+        <div class="glass-text-container hidden">
           <!-- Workaround using SVGfied text as a mask for backdrop-filter application, the only way to implement glassmorphism effect on text -->
           <div class="glass-effect"></div>
         </div>
         <!-- SVG definitions for the mask -->
-        <svg width="100%" height="100%" viewBox="0 0 1200 300">
+        <svg width="100%" height="100%" viewBox="0 0 1200 300" class="hidden">
           <defs>
             <mask id="clock-mask" width="1200" height="300">
               <text id="date-text" x="50%" y="50" font-size="var(--date-font-size)" font-family="var(--clock-font)" font-weight="var(--date-font-weight)" 
@@ -28,6 +28,12 @@
             </mask>
           </defs>
         </svg>
+        
+        <!-- Simple fallback clock without effects -->
+        <div id="fallback-clock" class="fallback-clock">
+          <div id="fallback-date" class="fallback-date">Friday, May 3</div>
+          <div id="fallback-time" class="fallback-time">00:00</div>
+        </div>
       </div>
       <!-- Login Box -->
       <div id="login-container">
