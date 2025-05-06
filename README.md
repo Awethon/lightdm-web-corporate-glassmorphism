@@ -7,6 +7,7 @@
 2. `git clone` this repo into `/usr/share/web-greeter/themes`
 3. Add a background of your choice to `backgrounds` folder of this theme and set its name and format in scripts.js: `const backgroundFile = "backgrounds/background.mp4"`
 4. Set theme name (folder name in `themes`) in `/etc/lightdm/web-greeter.yml`
+5. It's possible to test if everything works correctly by running `web-greeter -d`
 
 ## Notes
 1. Semi-transparent clock is disabled because it can't be rendered on an outdated version of the browser that web-greeter runs. It should be possible to run it after web-greeter is upgraded to Qt6.
