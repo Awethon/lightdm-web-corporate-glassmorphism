@@ -9,3 +9,4 @@
 
 ## Notes
 1. Semi-transparent clock is disabled because it can't be rendered on an outdated version of the browser that web-greeter runs. It should be possible to run it after web-greeter is upgraded to Qt6.
+2. Adaptive design could be implemented better.
