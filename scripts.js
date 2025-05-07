@@ -89,7 +89,8 @@ function fetchOSDataAndUpdateUI() {
   const passwordInput = document.getElementById('password-input');
 
   const users = window.lightdm.users;
-  let selectedUser = users[0]; // Default selected user
+  let selectedUser = null;
+  selectUser(users[0]); // Default selected user
   
   // Setup user selection panel
   setupUserSelectionPanel();
@@ -158,8 +159,11 @@ function fetchOSDataAndUpdateUI() {
   }
   
   function selectUser(user) {
+    window.lightdm.cancel_authentication();
     selectedUser = user;
     updateUIWithSelectedUser();
+    console.log(`Calling authenticate with username: ${selectedUser.username ?? "null"}`);
+    window.lightdm.authenticate(selectedUser.username ?? null);
   }
   
   function updateUIWithSelectedUser() {
@@ -271,12 +275,6 @@ function fetchOSDataAndUpdateUI() {
       console.log(`Authentication process starting for user: ${selectedUser.username}`);
       console.log(`Selected user display name: ${selectedUser.display_name}`);
       console.log(`Selected user session: ${selectedUser.session}`);
-      
-      window.lightdm.cancel_authentication();
-      await window.wait(50);
-      console.log(`Calling authenticate with username: ${selectedUser.username ?? "null"}`);
-      window.lightdm.authenticate(selectedUser.username ?? null);
-      await window.wait(50);
       
       const password = passwordInputElem.value ?? "";
       console.log(`Password entered: ${password.replace(/./g, '*')}`);
